@@ -26,11 +26,7 @@
             cursor: pointer; transition: transform 0.2s; text-align: center;
         }
         .card:hover { transform: scale(1.05); }
-        .card .thumb {
-            width: 100%; height: 140px; background: #0f3460;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 48px;
-        }
+        .card img { width: 100%; height: 140px; object-fit: cover; }
         .card p { margin: 10px; font-size: 14px; }
         canvas { background: #0f3460; border-radius: 8px; }
         .score { font-size: 18px; margin: 10px 0; }
@@ -75,15 +71,15 @@
         <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
         <h2 class="section-title">🆕 Latest</h2>
         <div class="grid">
-            <div class="card" onclick="go('bloxd')"><div class="thumb">🟦</div><p>Bloxd.io</p></div>
-            <div class="card" onclick="go('snake')"><div class="thumb">🐍</div><p>Snake</p></div>
-            <div class="card" onclick="go('ttt')"><div class="thumb">❌</div><p>Tic-Tac-Toe</p></div>
+            <div class="card" onclick="go('bloxd')"><img src="bloxd.png"><p>Bloxd.io</p></div>
+            <div class="card" onclick="go('snake')"><img src="snake.png"><p>Snake</p></div>
+            <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>
         </div>
         <h2 class="section-title">📋 All Games</h2>
         <div class="grid">
-            <div class="card" onclick="go('snake')"><div class="thumb">🐍</div><p>Snake</p></div>
-            <div class="card" onclick="go('ttt')"><div class="thumb">❌</div><p>Tic-Tac-Toe</p></div>
-            <div class="card" onclick="go('bloxd')"><div class="thumb">🟦</div><p>Bloxd.io</p></div>
+            <div class="card" onclick="go('snake')"><img src="snake.png"><p>Snake</p></div>
+            <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>
+            <div class="card" onclick="go('bloxd')"><img src="bloxd.png"><p>Bloxd.io</p></div>
         </div>
     </div>
 
