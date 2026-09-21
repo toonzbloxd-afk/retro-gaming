@@ -1,2 +1,2 @@
 # retro-gaming
-Snake &amp; Tic-Tac-Toe
+free games to play!
