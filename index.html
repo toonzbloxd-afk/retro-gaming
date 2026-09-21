@@ -46,12 +46,31 @@
             font-size: 40px; cursor: pointer;
         }
         #ttt-board div:hover { background: #1a3a5c; }
+        .game-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 500px; margin: 10px auto 0;
+        }
+        .game-name { font-size: 16px; font-weight: bold; }
+        .vote-btns { display: flex; gap: 8px; }
+        .vote-btn {
+            padding: 6px 14px; border: none; border-radius: 6px;
+            background: #16213e; color: #fff; font-size: 14px; cursor: pointer;
+        }
+        .vote-btn:hover { background: #1a3a5c; }
+        .vote-btn.liked { background: #4ecca3; color: #000; }
+        .vote-btn.disliked { background: #e94560; }
+        .fs-btn {
+            padding: 6px 14px; border: none; border-radius: 6px;
+            background: #16213e; color: #fff; font-size: 14px; cursor: pointer;
+        }
+        .fs-btn:hover { background: #1a3a5c; }
+        .game-area { position: relative; }
     </style>
 </head>
 <body>
     <h1>🎮 Retro Gaming</h1>
 
-    <!-- HOME PAGE -->
+    <!-- HOME -->
     <div id="home" class="page active">
         <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
         <h2 class="section-title">🆕 Latest</h2>
@@ -70,16 +89,36 @@
     <div id="snake" class="page">
         <button class="back-btn" onclick="go('home')">← Back</button>
         <div class="score">Score: <span id="s-score">0</span></div>
-        <canvas id="s-canvas" width="300" height="300"></canvas>
+        <div class="game-area">
+            <canvas id="s-canvas" width="300" height="300"></canvas>
+        </div>
         <p>Use arrow keys to move</p>
+        <div class="game-bar">
+            <span class="game-name">Snake</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('snake',1)">👍 <span id="snake-up">0</span></button>
+                <button class="vote-btn" onclick="vote('snake',-1)">👎 <span id="snake-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('snake')">⛶ Fullscreen</button>
+        </div>
     </div>
 
     <!-- TIC TAC TOE -->
     <div id="ttt" class="page">
         <button class="back-btn" onclick="go('home')">← Back</button>
         <div class="score">Player: <span id="t-turn">❌</span></div>
-        <div id="ttt-board"></div>
+        <div class="game-area">
+            <div id="ttt-board"></div>
+        </div>
         <p id="t-msg"></p>
+        <div class="game-bar">
+            <span class="game-name">Tic-Tac-Toe</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('ttt',1)">👍 <span id="ttt-up">0</span></button>
+                <button class="vote-btn" onclick="vote('ttt',-1)">👎 <span id="ttt-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('ttt')">⛶ Fullscreen</button>
+        </div>
     </div>
 
 <script>
@@ -98,7 +137,34 @@ function filterGames(query) {
     });
 }
 
-// SNAKE
+function toggleFS(id) {
+    const el = document.getElementById(id);
+    if (!document.fullscreenElement) {
+        el.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function vote(game, val) {
+    const key = 'vote_' + game;
+    const current = parseInt(localStorage.getItem(key) || '0');
+    if (current === val) {
+        localStorage.setItem(key, '0');
+    } else {
+        localStorage.setItem(key, String(val));
+    }
+    updateVoteUI(game);
+}
+
+function updateVoteUI(game) {
+    const val = parseInt(localStorage.getItem('vote_' + game) || '0');
+    const upBtn = document.querySelector(`[onclick="vote('${game}',1)"]`);
+    const downBtn = document.querySelector(`[onclick="vote('${game}',-1)"]`);
+    upBtn.classList.toggle('liked', val === 1);
+    downBtn.classList.toggle('disliked', val === -1);
+}
+
 const canvas = document.getElementById('s-canvas');
 const ctx = canvas.getContext('2d');
 let snake = [{x:150,y:150}], dir = {x:10,y:0}, food = {x:200,y:200}, score = 0;
@@ -143,7 +209,6 @@ document.addEventListener('keydown', e => {
 setInterval(updateSnake, 120);
 drawSnake();
 
-// TIC TAC TOE
 const board = document.getElementById('ttt-board');
 let cells = Array(9).fill(''), turn = '❌';
 for (let i = 0; i < 9; i++) {
