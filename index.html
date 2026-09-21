@@ -6,8 +6,10 @@
     <title>Retro Gaming</title>
     <link rel="icon" href="favicon.png">
     <style>
-        body { background: #1a1a2e; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        h1 { text-align: center; }
+        body { background: #1a1a2e; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 20px; text-align: center; }
+        h1 { margin-bottom: 5px; }
+        .page { display: none; }
+        .page.active { display: block; }
         .search-box {
             width: 100%; max-width: 500px; margin: 20px auto; padding: 12px 20px;
             font-size: 18px; border: none; border-radius: 25px;
@@ -24,51 +26,146 @@
             cursor: pointer; transition: transform 0.2s; text-align: center;
         }
         .card:hover { transform: scale(1.05); }
-        .card img { width: 100%; height: 140px; object-fit: cover; }
         .card .thumb {
             width: 100%; height: 140px; background: #0f3460;
             display: flex; align-items: center; justify-content: center;
             font-size: 48px;
         }
         .card p { margin: 10px; font-size: 14px; }
+        canvas { background: #0f3460; border-radius: 8px; }
+        .score { font-size: 18px; margin: 10px 0; }
+        .back-btn {
+            display: inline-block; margin: 15px 0; padding: 8px 20px;
+            background: #e94560; color: #fff; border: none; border-radius: 8px;
+            font-size: 16px; cursor: pointer;
+        }
+        #ttt-board { display: grid; grid-template-columns: repeat(3,80px); gap: 4px; justify-content: center; margin: 20px auto; }
+        #ttt-board div {
+            width: 80px; height: 80px; background: #16213e; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; cursor: pointer;
+        }
+        #ttt-board div:hover { background: #1a3a5c; }
     </style>
 </head>
 <body>
     <h1>🎮 Retro Gaming</h1>
-    <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
 
-    <h2 class="section-title">🆕 Latest</h2>
-    <div class="grid" id="latest-grid">
-        <a class="card" href="games/snake.html">
-            <div class="thumb">🐍</div>
-            <p>Snake</p>
-        </a>
-        <a class="card" href="games/tic-tac-toe.html">
-            <div class="thumb">❌</div>
-            <p>Tic-Tac-Toe</p>
-        </a>
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
+        <h2 class="section-title">🆕 Latest</h2>
+        <div class="grid">
+            <div class="card" onclick="go('snake')"><div class="thumb">🐍</div><p>Snake</p></div>
+            <div class="card" onclick="go('ttt')"><div class="thumb">❌</div><p>Tic-Tac-Toe</p></div>
+        </div>
+        <h2 class="section-title">📋 All Games</h2>
+        <div class="grid">
+            <div class="card" onclick="go('snake')"><div class="thumb">🐍</div><p>Snake</p></div>
+            <div class="card" onclick="go('ttt')"><div class="thumb">❌</div><p>Tic-Tac-Toe</p></div>
+        </div>
     </div>
 
-    <h2 class="section-title">📋 All Games</h2>
-    <div class="grid" id="all-grid">
-        <a class="card" href="games/snake.html">
-            <div class="thumb">🐍</div>
-            <p>Snake</p>
-        </a>
-        <a class="card" href="games/tic-tac-toe.html">
-            <div class="thumb">❌</div>
-            <p>Tic-Tac-Toe</p>
-        </a>
-        <!-- ADD MORE GAMES HERE -->
+    <!-- SNAKE -->
+    <div id="snake" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="score">Score: <span id="s-score">0</span></div>
+        <canvas id="s-canvas" width="300" height="300"></canvas>
+        <p>Use arrow keys to move</p>
+    </div>
+
+    <!-- TIC TAC TOE -->
+    <div id="ttt" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="score">Player: <span id="t-turn">❌</span></div>
+        <div id="ttt-board"></div>
+        <p id="t-msg"></p>
     </div>
 
 <script>
+function go(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'ttt') resetTTT();
+    if (id === 'snake') resetSnake();
+}
+
 function filterGames(query) {
     const q = query.toLowerCase();
     document.querySelectorAll('.card').forEach(card => {
         const name = card.querySelector('p').textContent.toLowerCase();
         card.style.display = name.includes(q) ? '' : 'none';
     });
+}
+
+// SNAKE
+const canvas = document.getElementById('s-canvas');
+const ctx = canvas.getContext('2d');
+let snake = [{x:150,y:150}], dir = {x:10,y:0}, food = {x:200,y:200}, score = 0;
+
+function resetSnake() {
+    snake = [{x:150,y:150}]; dir = {x:10,y:0}; score = 0;
+    food = {x:200,y:200};
+    drawSnake();
+}
+
+function drawSnake() {
+    ctx.clearRect(0,0,300,300);
+    ctx.fillStyle = '#e94560';
+    ctx.fillRect(food.x, food.y, 10, 10);
+    ctx.fillStyle = '#4ecca3';
+    snake.forEach(s => ctx.fillRect(s.x, s.y, 10, 10));
+    document.getElementById('s-score').textContent = score;
+}
+
+function updateSnake() {
+    if (!document.getElementById('snake').classList.contains('active')) return;
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+    if (head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300 || snake.some(s => s.x===head.x && s.y===head.y)) {
+        resetSnake();
+    } else {
+        snake.unshift(head);
+        if (head.x === food.x && head.y === food.y) {
+            score += 10;
+            food = {x: Math.floor(Math.random()*29)*10, y: Math.floor(Math.random()*29)*10};
+        } else {
+            snake.pop();
+        }
+    }
+    drawSnake();
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp') dir = {x:0,y:-10};
+    if (e.key === 'ArrowDown') dir = {x:0,y:10};
+    if (e.key === 'ArrowLeft') dir = {x:-10,y:0};
+    if (e.key === 'ArrowRight') dir = {x:10,y:0};
+});
+setInterval(updateSnake, 120);
+drawSnake();
+
+// TIC TAC TOE
+const board = document.getElementById('ttt-board');
+let cells = Array(9).fill(''), turn = '❌';
+for (let i = 0; i < 9; i++) {
+    const d = document.createElement('div');
+    d.onclick = () => play(i, d);
+    board.appendChild(d);
+}
+const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+function resetTTT() {
+    cells = Array(9).fill(''); turn = '❌';
+    document.getElementById('t-msg').textContent = '';
+    document.getElementById('t-turn').textContent = '❌';
+    board.querySelectorAll('div').forEach(d => d.textContent = '');
+}
+function play(i, d) {
+    if (cells[i] || document.getElementById('t-msg').textContent) return;
+    cells[i] = turn; d.textContent = turn;
+    const w = wins.find(w => w.every(c => cells[c] === turn));
+    if (w) { document.getElementById('t-msg').textContent = turn + ' wins! 🎉'; return; }
+    if (!cells.includes('')) { document.getElementById('t-msg').textContent = "It's a draw!"; return; }
+    turn = turn === '❌' ? '⭕' : '❌';
+    document.getElementById('t-turn').textContent = turn;
 }
 </script>
 </body>
