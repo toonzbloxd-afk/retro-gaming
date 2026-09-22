@@ -72,10 +72,11 @@
         <h2 class="section-title">📋 All Games</h2>
         <div class="grid">
             <div class="card" onclick="go('stickman')"><img src="stickmanclash.png"><p>Stickman Clash</p></div>
+            <div class="card" onclick="go('2048')"><img src="2048.png"><p>2048</p></div>
             <div class="card" onclick="go('bloxd')"><img src="bloxdio.png"><p>Bloxd.io</p></div>
             <div class="card" onclick="go('fishing')"><img src="tinyfishing.png"><p>Tiny Fishing</p></div>
             <div class="card" onclick="go('snake')"><img src="snake.png"><p>Snake</p></div>
-            <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>  
+            <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>
         </div>
     </div>
 
@@ -163,6 +164,22 @@
         </div>
     </div>
 
+    <!-- 2048 -->
+    <div id="2048" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="game-area">
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+        </div>
+        <div class="game-bar">
+            <span class="game-name">2048</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('2048',1)">👍 <span id="2048-up">0</span></button>
+                <button class="vote-btn" onclick="vote('2048',-1)">👎 <span id="2048-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('2048')">⛶ Fullscreen</button>
+        </div>
+    </div>
+
 <script>
 let snakeInterval = null;
 
@@ -174,7 +191,8 @@ function go(id) {
     if (id === 'ttt') resetTTT();
     if (id === 'bloxd') loadIframe('bloxd');
     if (id === 'fishing') loadIframe('fishing');
-    if (id === 'stickman') loadIframe('stickman');   
+    if (id === 'stickman') loadIframe('stickman');
+    if (id === '2048') loadIframe('2048');
 }
 
 function stopAllGames() {
@@ -186,7 +204,8 @@ function loadIframe(id) {
     const iframe = document.querySelector('#' + id + ' iframe');
     if (id === 'bloxd') iframe.src = 'https://www.crazygames.com/embed/bloxdhop-io';
     if (id === 'fishing') iframe.src = 'https://www.crazygames.com/embed/tiny-fishing';
-    if (id === 'stickman') iframe.src = 'https://1games.io/embed/stickman-clash';
+    if (id === 'stickman') iframe.src = 'https://1games.io/game/stickman-clash/';
+    if (id === '2048') iframe.src = 'https://1games.io/game/2048/';
 }
 
 function filterGames(query) {
