@@ -71,10 +71,11 @@
         <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
         <h2 class="section-title">📋 All Games</h2>
         <div class="grid">
+            <div class="card" onclick="go('stickman')"><img src="stickmanclash.png"><p>Stickman Clash</p></div>
             <div class="card" onclick="go('bloxd')"><img src="bloxdio.png"><p>Bloxd.io</p></div>
+            <div class="card" onclick="go('fishing')"><img src="tinyfishing.png"><p>Tiny Fishing</p></div>
             <div class="card" onclick="go('snake')"><img src="snake.png"><p>Snake</p></div>
             <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>
-            <div class="card" onclick="go('fishing')"><img src="tinyfishing.png"><p>Tiny Fishing</p></div>
         </div>
     </div>
 
@@ -118,7 +119,7 @@
     <div id="bloxd" class="page">
         <button class="back-btn" onclick="go('home')">← Back</button>
         <div class="game-area">
-            <iframe src="https://www.crazygames.com/embed/bloxdhop-io" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
         </div>
         <div class="game-bar">
             <span class="game-name">Bloxd.io</span>
@@ -134,7 +135,7 @@
     <div id="fishing" class="page">
         <button class="back-btn" onclick="go('home')">← Back</button>
         <div class="game-area">
-            <iframe src="https://www.crazygames.com/embed/tiny-fishing" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
         </div>
         <div class="game-bar">
             <span class="game-name">Tiny Fishing</span>
@@ -146,37 +147,46 @@
         </div>
     </div>
 
+    <!-- STICKMAN CLASH -->
+    <div id="stickman" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="game-area">
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+        </div>
+        <div class="game-bar">
+            <span class="game-name">Stickman Clash</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('stickman',1)">👍 <span id="stickman-up">0</span></button>
+                <button class="vote-btn" onclick="vote('stickman',-1)">👎 <span id="stickman-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('stickman')">⛶ Fullscreen</button>
+        </div>
+    </div>
+
 <script>
 let snakeInterval = null;
 
 function go(id) {
-    // STOP all games before switching
     stopAllGames();
-
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-
-    // START the new game
     if (id === 'snake') startSnake();
     if (id === 'ttt') resetTTT();
     if (id === 'bloxd') loadIframe('bloxd');
     if (id === 'fishing') loadIframe('fishing');
+    if (id === 'stickman') loadIframe('stickman');
 }
 
 function stopAllGames() {
-    // Stop snake
     if (snakeInterval) { clearInterval(snakeInterval); snakeInterval = null; }
-
-    // Stop iframes (removes audio)
-    document.querySelectorAll('.game-area iframe').forEach(f => {
-        f.src = 'about:blank';
-    });
+    document.querySelectorAll('.game-area iframe').forEach(f => { f.src = 'about:blank'; });
 }
 
 function loadIframe(id) {
     const iframe = document.querySelector('#' + id + ' iframe');
     if (id === 'bloxd') iframe.src = 'https://www.crazygames.com/embed/bloxdhop-io';
     if (id === 'fishing') iframe.src = 'https://www.crazygames.com/embed/tiny-fishing';
+    if (id === 'stickman') iframe.src = 'https://www.crazygames.com/embed/stickman-clash';
 }
 
 function filterGames(query) {
@@ -189,21 +199,15 @@ function filterGames(query) {
 
 function toggleFS(id) {
     const el = document.getElementById(id);
-    if (!document.fullscreenElement) {
-        el.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
+    if (!document.fullscreenElement) { el.requestFullscreen(); }
+    else { document.exitFullscreen(); }
 }
 
 function vote(game, val) {
     const key = 'vote_' + game;
     const current = parseInt(localStorage.getItem(key) || '0');
-    if (current === val) {
-        localStorage.setItem(key, '0');
-    } else {
-        localStorage.setItem(key, String(val));
-    }
+    if (current === val) { localStorage.setItem(key, '0'); }
+    else { localStorage.setItem(key, String(val)); }
     updateVoteUI(game);
 }
 
@@ -215,7 +219,6 @@ function updateVoteUI(game) {
     downBtn.classList.toggle('disliked', val === -1);
 }
 
-// SNAKE
 const canvas = document.getElementById('s-canvas');
 const ctx = canvas.getContext('2d');
 let snake = [{x:150,y:150}], dir = {x:10,y:0}, food = {x:200,y:200}, score = 0;
@@ -262,7 +265,6 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') dir = {x:10,y:0};
 });
 
-// TIC TAC TOE
 const board = document.getElementById('ttt-board');
 let cells = Array(9).fill(''), turn = '❌';
 for (let i = 0; i < 9; i++) {
@@ -286,6 +288,6 @@ function play(i, d) {
     turn = turn === '❌' ? '⭕' : '❌';
     document.getElementById('t-turn').textContent = turn;
 }
-</script>   
+</script>
 </body>
 </html>   
