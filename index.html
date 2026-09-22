@@ -69,12 +69,12 @@
     <!-- HOME -->
     <div id="home" class="page active">
         <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
-        
         <h2 class="section-title">📋 All Games</h2>
         <div class="grid">
+            <div class="card" onclick="go('bloxd')"><img src="bloxdio.png"><p>Bloxd.io</p></div>
             <div class="card" onclick="go('snake')"><img src="snake.png"><p>Snake</p></div>
             <div class="card" onclick="go('ttt')"><img src="tictactoe.png"><p>Tic-Tac-Toe</p></div>
-            <div class="card" onclick="go('bloxd')"><img src="bloxdio.png"><p>Bloxd.io</p></div>
+            <div class="card" onclick="go('fishing')"><img src="tinyfishing.png"><p>Tiny Fishing</p></div>
         </div>
     </div>
 
@@ -128,7 +128,23 @@
             </div>
             <button class="fs-btn" onclick="toggleFS('bloxd')">⛶ Fullscreen</button>
         </div>
-    </div>   
+    </div>
+
+    <!-- TINY FISHING -->
+    <div id="fishing" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="game-area">
+            <iframe src="https://www.crazygames.com/embed/tiny-fishing" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+        </div>
+        <div class="game-bar">
+            <span class="game-name">Tiny Fishing</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('fishing',1)">👍 <span id="fishing-up">0</span></button>
+                <button class="vote-btn" onclick="vote('fishing',-1)">👎 <span id="fishing-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('fishing')">⛶ Fullscreen</button>
+        </div>
+    </div>
 
 <script>
 function go(id) {
