@@ -163,6 +163,22 @@
             <button class="fs-btn" onclick="toggleFS('stickman')">⛶ Fullscreen</button>
         </div>
     </div>
+
+    <!-- MOTO X3M -->
+    <div id="moto" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="game-area">
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+        </div>
+        <div class="game-bar">
+            <span class="game-name">Moto X3M</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('moto',1)">👍 <span id="moto-up">0</span></button>
+                <button class="vote-btn" onclick="vote('moto',-1)">👎 <span id="moto-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('moto')">⛶ Fullscreen</button>
+        </div>
+    </div>   
     
 <script>
 let snakeInterval = null;
@@ -176,6 +192,7 @@ function go(id) {
     if (id === 'bloxd') loadIframe('bloxd');
     if (id === 'fishing') loadIframe('fishing');
     if (id === 'stickman') loadIframe('stickman'); 
+    if (id === 'moto') loadIframe('moto');   
 }
 
 function stopAllGames() {
@@ -188,6 +205,7 @@ function loadIframe(id) {
     if (id === 'bloxd') iframe.src = 'https://www.crazygames.com/embed/bloxdhop-io';
     if (id === 'fishing') iframe.src = 'https://www.crazygames.com/embed/tiny-fishing';
     if (id === 'stickman') iframe.src = 'https://1games.io/embed/stickman-clash';
+    if (id === 'moto') iframe.src = 'https://1games.io/game/moto-x3m/';   
 }
 
 function filterGames(query) {
