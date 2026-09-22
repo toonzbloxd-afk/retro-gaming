@@ -163,6 +163,22 @@
         </div>
     </div>
 
+    <!-- SLOPE 2 -->
+    <div id="slope2" class="page">
+        <button class="back-btn" onclick="go('home')">← Back</button>
+        <div class="game-area">
+            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="gamepad *;"></iframe>
+        </div>
+        <div class="game-bar">
+            <span class="game-name">Slope 2</span>
+            <div class="vote-btns">
+                <button class="vote-btn" onclick="vote('slope2',1)">👍 <span id="slope2-up">0</span></button>
+                <button class="vote-btn" onclick="vote('slope2',-1)">👎 <span id="slope2-down">0</span></button>
+            </div>
+            <button class="fs-btn" onclick="toggleFS('slope2')">⛶ Fullscreen</button>
+        </div>
+    </div>  
+    
 <script>
 let snakeInterval = null;
 
