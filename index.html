@@ -71,7 +71,6 @@
         <input class="search-box" type="text" placeholder="Search games..." oninput="filterGames(this.value)">
         <h2 class="section-title">📋 All Games</h2>
         <div class="grid">
-            <div class="card" onclick="go('cookie')"><img src="cookieclicker.png"><p>Cookie Clicker</p></div>
             <div class="card" onclick="go('stickman')"><img src="stickmanclash.png"><p>Stickman Clash</p></div>
             <div class="card" onclick="go('bloxd')"><img src="bloxdio.png"><p>Bloxd.io</p></div>
             <div class="card" onclick="go('fishing')"><img src="tinyfishing.png"><p>Tiny Fishing</p></div>
@@ -164,22 +163,6 @@
         </div>
     </div>
 
-    <!-- COOKIE CLICKER -->
-    <div id="cookie" class="page">
-        <button class="back-btn" onclick="go('home')">← Back</button>
-        <div class="game-area">
-            <iframe src="about:blank" style="width:100%;height:80vh;border:none;border-radius:8px;" allow="autoplay; fullscreen; gamepad"></iframe>
-        </div>
-        <div class="game-bar">
-            <span class="game-name">Cookie Clicker</span>
-            <div class="vote-btns">
-                <button class="vote-btn" onclick="vote('cookie',1)">👍 <span id="cookie-up">0</span></button>
-                <button class="vote-btn" onclick="vote('cookie',-1)">👎 <span id="cookie-down">0</span></button>
-            </div>
-            <button class="fs-btn" onclick="toggleFS('cookie')">⛶ Fullscreen</button>
-        </div>
-    </div>
-
 <script>
 let snakeInterval = null;
 
@@ -192,7 +175,6 @@ function go(id) {
     if (id === 'bloxd') loadIframe('bloxd');
     if (id === 'fishing') loadIframe('fishing');
     if (id === 'stickman') loadIframe('stickman');
-    if (id === 'cookie') loadIframe('cookie');
 }
 
 function stopAllGames() {
@@ -205,7 +187,6 @@ function loadIframe(id) {
     if (id === 'bloxd') iframe.src = 'https://www.crazygames.com/embed/bloxdhop-io';
     if (id === 'fishing') iframe.src = 'https://www.crazygames.com/embed/tiny-fishing';
     if (id === 'stickman') iframe.src = 'https://1games.io/game/stickman-clash/';
-    if (id === 'cookie') iframe.src = 'https://gamezipper.com/cookie-clicker/?utm_source=embed';
 }
 
 function filterGames(query) {
